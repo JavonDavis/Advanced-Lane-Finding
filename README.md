@@ -176,7 +176,7 @@ All of this with the lines identified was then plotted back on the original imag
 
 ### 8. Video with pipeline applied
 
-Here's ![the pipeline][project_video] when applied to the project_video.mp4 file,
+Here's ![a video][project_video] of the pipeline applied to the project_video.mp4 file,
 
 ### 9. Problems Faced and Improvements
 
