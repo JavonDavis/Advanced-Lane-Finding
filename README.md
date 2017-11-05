@@ -29,6 +29,7 @@ The main goals / steps of this project are the following:
 [image_rgb]: ./readme_images/image_rgb.png "Image RGB"
 [image_color_gradient_combined]: ./readme_images/image_color_gradient_combined.png "Image Color+gradient"
 [image_thresh_warped]: ./readme_images/image_thresh_warped.png "Image Threshold Warped"
+[image_sliding_window]: ./readme_images/image_sliding_window.png "Image Sliding Window"
 
 
 
@@ -132,4 +133,8 @@ Note this would be performed on our warped image so in the pipleine it would mor
 
 ![alt text][image_thresh_warped]
 
-### 5. 
+### 5. Fitting Lane Lines
+
+Then I used the sliding window histogram technique and fit my lane lines with a 2nd order polynomial kinda like this:
+
+![alt text][image_sliding_windows]
