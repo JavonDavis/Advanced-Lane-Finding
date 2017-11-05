@@ -31,7 +31,7 @@ The code for this step is contained in the first few code cells of the IPython n
 
 I then used the output objpoints and imgpoints to compute the camera calibration and distortion coefficients using the cv2.calibrateCamera() function. I applied this distortion correction to a test image using the cv2.undistort() function and obtained this result:
 
-![alt text][image_undistorted_calibaration]
+![alt text][image_undistorted_calibrationn]
 
 
 ### Pipeline
