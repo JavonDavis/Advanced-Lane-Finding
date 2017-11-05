@@ -29,7 +29,13 @@ The main goals / steps of this project are the following:
 [image_rgb]: ./readme_images/image_rgb.png "Image RGB"
 [image_color_gradient_combined]: ./readme_images/image_color_gradient_combined.png "Image Color+gradient"
 [image_thresh_warped]: ./readme_images/image_thresh_warped.png "Image Threshold Warped"
+[image_histogram]: ./readme_images/image_histogram.png "Image Histogram"
 [image_sliding_window]: ./readme_images/image_sliding_window.png "Image Sliding Window"
+[image_final]: ./readme_images/image_final.png "Image Final"
+[project_video]: ./output_videos/project_video.mp4 "Project Video"
+[challenge_video]: ./output_videos/challenge_video.mp4 "Challenge Video"
+[bad_output_highlighted]: ./readme_images/bad_output_highlighted.png "Bad Output"
+
 
 
 
@@ -133,8 +139,57 @@ Note this would be performed on our warped image so in the pipleine it would mor
 
 ![alt text][image_thresh_warped]
 
-### 5. Fitting Lane Lines
+### 5. Finding and fitting Lane Lines
 
-Then I used the sliding window histogram technique and fit my lane lines with a 2nd order polynomial kinda like this:
+#### Lane Finding Method: Peaks in a Histogram
 
-![alt text][image_sliding_windows]
+I first take a histogram along all the columns in the lower half of the image like this,
+
+```pyton
+histogram = np.sum(binary_warped[binary_warped.shape[0]//2:,:], axis=0)
+plt.plot(histogram)
+```
+
+Here's a sample of what the result might look like,
+
+![alt text][image_histogram]
+
+With this histogram I am adding up the pixel values along each column in the image. In my thresholded binary image, pixels are either 0 or 1, so the two most prominent peaks in this histogram will be good indicators of the x-position of the base of the lane lines. I can use that as a starting point for where to search for the lines. From that point, I can use a sliding window, placed around the line centers, to find and follow the lines up to the top of the frame.
+
+Here is [a link](https://youtu.be/siAMDK8C_x8) to a short animation showing this method.
+
+After all the points for the left line and the right line are identified they are then fit to a second order polynomial using the `np.polyfit` function. Here's an example of the what the result of this step would look like,
+
+![alt text][image_sliding_window]
+
+The exact code implementation is defined in the `sliding_window` function which can be found in the 36th code cell in the iPython Notebook. 
+
+### 6.  Finding the Radius of curvature
+
+The radius of curvature is the radius of the circular arc which best approximates the curve at a point. Calculating this would help in understanding if my polynomial makes sense. This calculation along with the distance from the center was done in the 40th code cell in the iPython Notebook. This radius was caluated for both the left and right lane lines and was printed out back on the image
+
+### 7. Final plot
+
+All of this with the lines identified was then plotted back on the original image and then used draw a shape which should line up with the lane lines. This was shown earlier at the beginning but here is another example of what the final result would look like, 
+
+![alt text][image_final]
+
+### 8. Video with pipeline applied
+
+Here's the pipeline when applied to the project_video.mp4 file,
+
+![alt text][project_video]
+
+### 9. Problems Faced and Improvements
+
+A big problem I had was identifying the lane lanes for example when there was actually none on the road after warping the image as this is the case in at some points in the video. I would end up with lines that fit like this, 
+
+![alt text][bad_output_highlighted]
+
+and no matter how hard I tried the line on the right just could not be properly identified with the gradient and color thresholds. To combat this I used an implementation I found online that tries to 'remember' the previous lines and use that as a kind of best fit for a certain number of frames.
+
+The pipeline doesn't seem to perform well at sharp turns and also when there are a lot more distractions on the road it definately underperforms, you can see examples of this here on this video, 
+
+![alt text][challenge_video]
+
+So there's definately room for improvement there. 
