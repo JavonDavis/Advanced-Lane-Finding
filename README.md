@@ -1,7 +1,7 @@
 ## Advanced Lane Finding
 [![Udacity - Self-Driving Car NanoDegree](https://s3.amazonaws.com/udacity-sdc/github/shield-carnd.svg)](http://www.udacity.com/drive)
 
-In this project, I wrote a software pipeline to identify the lane boundaries in a video. The source for the project can be found in the notebook file main.ipynb. 
+In this project, I wrote a software pipeline to identify the lane line boundaries in a video. The source for the project can be found in the notebook file main.ipynb. 
 
 **Advanced Lane Finding Project**
 
@@ -24,6 +24,13 @@ The main goals / steps of this project are the following:
 [image_example_lanes_identified]: ./readme_images/image_example_lanes_identified.png "Example Image identified"
 [image_points]: ./readme_images/image_points.png "Image Points"
 [image_warped]: ./readme_images/image_warped.png "Image Warped"
+[image_gradient]: ./readme_images/image_gradient.png "Image Gradient"
+[image_hls]: ./readme_images/image_hls.png "Image HLS"
+[image_rgb]: ./readme_images/image_rgb.png "Image RGB"
+[image_color_gradient_combined]: ./readme_images/image_color_gradient_combined.png "Image Color+gradient"
+[image_thresh_warped]: ./readme_images/image_thresh_warped.png "Image Threshold Warped"
+
+
 
 ### Camera Calibration and Distortion Correction
 
@@ -39,6 +46,8 @@ I then used the output objpoints and imgpoints to compute the camera calibration
 The software pipeline accepts an image as input and returns that same image with the line lines identified and the area inbetween highlighted in green, like so:
 
 ![alt text][image_example] ![alt text][image_example_lanes_identified]
+
+The pipeline is then fed images frame by frame from a video stream and builds a new video where the lane lines are identified throughout.
 
 Below I'll describe the different steps the pipeline takes to achieve this in the order they were performed.
 
@@ -70,11 +79,57 @@ The code for my perspective transform includes a function called `warp(img)`, wh
        [200, 200]])
 ```
 
+
+This resulted in the following source and destination points:
+
+| Source        | Destination   | 
+|:-------------:|:-------------:| 
+| 800, 500      | 900, 200       | 
+| 1045, 700     | 900, 650      |
+| 370, 700    | 200, 650      |
+| 550, 500      | 200, 200        |
+
+
 The source points were chosen by eyeballing a few of the sample images and playing with a few options to get the best result.
 Here you can see the 4 points chosen plotted on a sample image, 
 
 ![alt text][image_points]
 
-The destination points were also chosen by eyeballing a set of rectangular points in the same space the image is originally ploted. For example after warping the above image the following is the result, 
+The destination points were also chosen by eyeballing a set of rectangular points in the same space the image is originally ploted. I verified that my perspective transform was working as expected by drawing the `src` and `dst` points onto a test image and its warped counterpart to verify that the lines appear parallel in the warped image.
 
 ![alt text][image_warped]
+
+### 4. Gradient and color thresholds
+
+These thresholds were applied in an effort to clearly identify the important features of lane lines in images. I used a combination of color and gradient thresholds to generate a binary image thresholding steps demonstrated from the 11th to the 35th code cells in the iPython Notebook. 
+
+#### Gradient Threshold
+
+When applying the gradient threshold various aspects of the gradient were considered such as the gradient with respect to both the x and y direction, the magnitude and the direction of the gradient. These were combined in a way to yield the best result. 
+Here's an example for how the image looked after Gradient Thresholding was applied,
+
+![alt text][image_gradient]
+
+#### Color Threshold
+
+Two color spaces were explored, RGB and HLS. A sample of both can be seen below,
+
+RGB
+
+![alt text][image_rgb]
+
+HLS
+
+![alt text][image_hls]
+
+Both channels were tested with a number of images and the S channel seems to have performed the best.
+
+This channel was then combined with the previous gradient threshold to produce a final binary image that would ideally have the both lane lines clearly identified. See example below,
+
+![alt text][image_color_gradient_combined]
+
+Note this would be performed on our warped image so in the pipleine it would more likely look like this,
+
+![alt text][image_thresh_warped]
+
+### 5. 
