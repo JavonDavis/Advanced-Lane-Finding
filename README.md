@@ -176,9 +176,7 @@ All of this with the lines identified was then plotted back on the original imag
 
 ### 8. Video with pipeline applied
 
-Here's the pipeline when applied to the project_video.mp4 file,
-
-![alt text][project_video]
+Here's ![a video][project_video] of the pipeline applied to the project_video.mp4 file,
 
 ### 9. Problems Faced and Improvements
 
@@ -188,8 +186,6 @@ A big problem I had was identifying the lane lanes for example when there was ac
 
 and no matter how hard I tried the line on the right just could not be properly identified with the gradient and color thresholds. To combat this I used an implementation I found online that tries to 'remember' the previous lines and use that as a kind of best fit for a certain number of frames.
 
-The pipeline doesn't seem to perform well at sharp turns and also when there are a lot more distractions on the road it definately underperforms, you can see examples of this here on this video, 
-
-![alt text][challenge_video]
+The pipeline doesn't seem to perform well at sharp turns and also when there are a lot more distractions on the road it definately underperforms, you can see examples of this here on ![this video][challenge_video]
 
 So there's definately room for improvement there. 
